@@ -1,0 +1,4 @@
+tag,label,ssim,psnr,mse
+ssim,Plain U-Net + L1 + SSIM,0.9615,62.0519,0.0033
+attention,Attention U-Net + L1 + SSIM,0.9612,62.1285,0.0032
+full,Attention U-Net + L1 + SSIM + GAN (Ours),0.9592,61.8005,0.0036

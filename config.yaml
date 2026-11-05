@@ -1,0 +1,33 @@
+# BraSyn MRI Synthesis - Default & Hyperparameter Search Space
+# Reference: arXiv:2305.09011 (BraSyn MICCAI 2023)
+
+data:
+  data_root: "Dataset - Training" # Path to BraTS/BraSyn dataset
+  modalities: ["t1n", "t1c", "t2w", "t2f"]
+  train_split: 0.85
+  val_split: 0.15
+  slice_axis: 2 # 0=sagittal, 1=coronal, 2=axial
+  patch_size: [160, 160] # 2D slice size (H, W)
+  normalize_percentile: [0.5, 99.5]
+
+model:
+  in_channels: 3 # 3 available modalities -> 1 target
+  out_channels: 1
+  base_channels: 32
+  depth: 4 # U-Net depth (3-5 in HPO)
+  dropout: 0.1 # (0.0 - 0.3 in HPO)
+
+training:
+  batch_size: 16 # (8-32 in HPO)
+  epochs: 100
+  learning_rate: 1.0e-3 # (1e-4 - 5e-3 in HPO)
+  weight_decay: 1.0e-5
+  lr_scheduler: "cosine" # "cosine" | "plateau" | "step"
+  loss_weights:
+    l1: 1.0
+    ssim: 0.5 # (0.2 - 1.0 in HPO)
+
+hpo:
+  n_trials: 30 # Optuna trials
+  timeout: 86400 # 24h in seconds
+  pruner: "median" # "median" | "hyperband" | "none"
